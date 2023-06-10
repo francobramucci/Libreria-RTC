@@ -23,4 +23,6 @@ void loop() {
   Serial.print(time.year);
   Serial.println("");
   delay(1000);  // Esperar antes de leer el siguiente registro
+
+  Serial.print(__TIME__);
 }

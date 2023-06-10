@@ -14,13 +14,12 @@
 
     byte bcdToDec(byte bcd);
 
-
     /*
      *  Con esta función comunicaremos desde donde queremos empezar
      *  a leer para posteriormente hacer una solicitud y obtener la 
      *  información de la fecha en formato de 24 horas
     */
 
-    DateTime getTime(byte rtc_addr);
+    DateTime getTime(int rtc_addr);
     
 #endif

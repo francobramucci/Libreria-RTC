@@ -4,7 +4,7 @@ byte bcdToDec(byte bcd) {
   return ((bcd >> 4) * 10) + (bcd & 0x0F);
 }
 
-DateTime getTime(byte rtc_addr){
+DateTime getTime(int rtc_addr){
   Wire.beginTransmission(rtc_addr);
   Wire.write(0x00);
   Wire.endTransmission();
@@ -23,3 +23,5 @@ DateTime getTime(byte rtc_addr){
   }
   return dateTime;
 }
+
+
