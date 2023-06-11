@@ -2,7 +2,6 @@
     #define rtc_H
     #define RTC_ADDRESS 0x68  // Dirección I2C del RTC DS1307/3231
 
-
     #include <Arduino.h>
     #include <Wire.h>
 
@@ -13,6 +12,16 @@
 
 
     byte bcdToDec(byte bcd);
+
+    byte decToBcd(byte fst, byte snd);
+
+    int getDayOfWeek(int year, int month, int day);
+
+    byte monthToBcd(String month);
+
+    void setDateAndTime(String time, String date);
+
+
 
     /*
      *  Con esta función comunicaremos desde donde queremos empezar
