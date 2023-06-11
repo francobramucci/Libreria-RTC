@@ -9,12 +9,12 @@ byte decToBcd(byte fst, byte snd){
 }
 
 DateTime getTime(int rtc_addr){
+    DateTime dateTime;
+
     Wire.beginTransmission(rtc_addr);
     Wire.write(0x00);
     Wire.endTransmission();
     Wire.requestFrom(rtc_addr, 7); //Pido 7 bytes, partiendo de 00h hasta 06h
-    
-    DateTime dateTime;
     
     if (Wire.available()) {
         dateTime.second = bcdToDec(Wire.read() & 0x7F);
@@ -37,18 +37,26 @@ int getDayOfWeek(int year, int month, int day){
     int h = (day + (13 * (month + 1) / 5) + year + (year / 4) - (year / 100) + (year / 400)) % 7;
 
     // Ajustar el resultado para que domingo sea 7
-    return ((h + 5) % 7) + 1;
+    return ((h + 6) % 7) + 1;
 }
 
 byte monthToBcd(String month){
-    String months[] = {"Jan", "Feb", "Mar", "Apr", "May", "Jun", "Jul", "Aug", "Sep", "Oct", "Nov", "Dec"}; 
+    String months[] = {"Jan", "Feb", "Mar", "Apr", "May", "Jun", "Jul", 
+                       "Aug", "Sep", "Oct", "Nov", "Dec"}; 
     for(int i = 0; i < 12; i++){
         if(month == months[i]) return bcdToDec(i+1);
     }
+
     return -1;
 }
 
-void setDateAndTime(String time, String date){
+void setDateTime(byte* buffer){
+    Wire.beginTransmission(RTC_ADDRESS);
+    Wire.write(buffer, 8);
+    Wire.endTransmission();
+}
+
+byte* getCompDateTime(String time, String date){
     byte bcdSeconds = decToBcd((time[6] - '0'), time[7] - '0');
     byte bcdMinutes = decToBcd((time[3] - '0'), time[4] - '0');
     byte bcdHours = decToBcd((time[0] - '0'), time[1] - '0');
@@ -61,6 +69,15 @@ void setDateAndTime(String time, String date){
     byte bcdMonth = monthToBcd(monthName); 
     byte bcdDayOfWeek = getDayOfWeek(bcdToDec(bcdYear) + 2000U, bcdToDec(bcdMonth), bcdToDec(bcdDayOfMonth));
 
+    static byte buffer[8]= { DS3231_TIME,
+                                bcdSeconds, 
+                                bcdMinutes, 
+                                bcdHours, 
+                                bcdDayOfWeek, 
+                                bcdDayOfMonth,
+                                bcdMonth,
+                                bcdYear
+                            };
 
     Serial.println("Month Name: " + monthName);
     Serial.println("Month (decimal): " + String(bcdToDec(bcdMonth), DEC));
@@ -90,7 +107,6 @@ void setDateAndTime(String time, String date){
 
     Serial.println("Hours (decimal): " + String(bcdToDec(bcdHours), DEC));
     Serial.println("Hours (binary): " + String(bcdHours, BIN));
+    
+    return buffer;
 }
-
-
-
