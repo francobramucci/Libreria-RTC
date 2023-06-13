@@ -26,7 +26,7 @@
      *  información de la fecha en formato de 24 horas
     */
 
-    DateTime getTime(int rtc_addr);
+    DateTime getTime(int rtc_addr, int regist_addr);
 
     byte* getCompDateTime(String time, String date);
 

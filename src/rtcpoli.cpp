@@ -8,7 +8,7 @@ byte decToBcd(byte fst, byte snd){
     return (fst << 4) | snd;
 }
 
-DateTime getTime(int rtc_addr){
+DateTime getTime(int rtc_addr, int regist_addr){
     DateTime dateTime;
 
     Wire.beginTransmission(rtc_addr);
@@ -37,7 +37,7 @@ int getDayOfWeek(int year, int month, int day){
     int h = (day + (13 * (month + 1) / 5) + year + (year / 4) - (year / 100) + (year / 400)) % 7;
 
     // Ajustar el resultado para que domingo sea 7
-    return ((h + 6) % 7) + 1;
+    return ((h + 5) % 7) + 1;
 }
 
 byte monthToBcd(String month){

@@ -8,7 +8,7 @@ void setup() {
 }
 
 void loop() {
-    DateTime time = getTime(0x68);
+    DateTime time = getTime(RTC_ADDRESS, DS3231_TIME);
 
     Serial.print("Fecha: ");
     Serial.print(time.hour);
